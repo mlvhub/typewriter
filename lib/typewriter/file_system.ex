@@ -40,8 +40,12 @@ defmodule Typewriter.FileSystem do
     |> Enum.map(&Task.await/1)
     |> Enum.map(fn {post, contents} ->
       Task.async(fn ->
+        # TODO: Refactor the file handling
         new_path = Path.join([build_path, Path.basename(root_dir), config.posts_dir, post.slug <> ".html"])
         File.write!(new_path, contents)
+        new_path = Path.join([build_path, Path.basename(root_dir), config.posts_dir, post.slug <> ".json"])
+        json = Poison.encode!(post)
+        File.write!(new_path, json)
       end)
     end)
     |> Enum.map(&Task.await/1)

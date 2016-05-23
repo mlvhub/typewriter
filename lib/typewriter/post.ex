@@ -2,7 +2,8 @@ defmodule Typewriter.Post do
 
   alias Typewriter.Yaml
 
-  defstruct slug: nil, title: nil, creation_date: nil, description: nil, content: nil, tags: []
+  @derive [Poison.Encoder]
+  defstruct slug: nil, title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author: nil
 
   # Agent API
 
@@ -46,8 +47,15 @@ defmodule Typewriter.Post do
       creation_date: Yaml.get_prop(props, "creation_date"),
       description: Yaml.get_prop(props, "description"),
       content: content,
-      tags: Yaml.get_tags(props)
+      sanitized_content: HtmlSanitizeEx.strip_tags(content),
+      tags: Yaml.get_tags(props),
     }
   end
 
+end
+
+defimpl Poison.Encoder, for: Typewriter.Post do
+  def encode(%Typewriter.Post{title: title, sanitized_content: body, author: author}, options) do
+    Poison.Encoder.Map.encode(%{title: title, body: body, author: author}, options)
+  end
 end

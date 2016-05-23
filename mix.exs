@@ -30,7 +30,9 @@ defmodule Typewriter.Mixfile do
   defp deps do
     [
       {:earmark, "~> 0.2.0"},
-      {:yamerl, github: "yakaz/yamerl"}
+      {:yamerl, github: "yakaz/yamerl"},
+      {:poison, "~> 2.0"},
+      {:html_sanitize_ex, "~> 1.0.0"},
     ]
   end
 end
