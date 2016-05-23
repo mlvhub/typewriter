@@ -1,22 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
-  <main>
-  <p><a href="/index.html">&laquo; Back to index</a></p>
-  <article>
-    <h1><%= @post.title %></h1>
-    <p><%= @post.creation_date %></p>
-    <ul>
-      <%= for tag <- @post.tags do %>
-        <li> <%= tag %> </li>
-      <% end %>
-    </ul>
-    <%= @post.content %>
-  </article>
-  </main>
-</body>
-</html>
+<p><a href="/index.html">&laquo; Back to index</a></p>
+<article>
+  <h1><%= @post.title %></h1>
+  <p><%= @post.creation_date %></p>
+  <ul>
+    <%= for tag <- @post.tags do %>
+      <li> <%= tag %> </li>
+    <% end %>
+  </ul>
+  <%= @post.content %>
+</article>

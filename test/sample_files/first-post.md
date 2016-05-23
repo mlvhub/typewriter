@@ -3,6 +3,7 @@ title: First post
 creation_date: 2016-04-24
 description: The first post is about one topic.
 tags: swift, ios,tdd
+layout: test/layout
 ---
 
 This post is written in **Markdown**.

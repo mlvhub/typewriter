@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  <main>
+  <h1>Layout</h1>
+    <%= @content %>
+  </main>
+</body>
+</html>

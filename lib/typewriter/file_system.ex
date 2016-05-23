@@ -32,8 +32,9 @@ defmodule Typewriter.FileSystem do
     Typewriter.Post.list
     |> Enum.map(fn post ->
       Task.async(fn ->
-        contents = EEx.eval_file(Path.join([root_dir, config.post_template]), assigns: [post: post])
-        {post, contents}
+        post_content = EEx.eval_file(Path.join([root_dir, config.post_template]), assigns: [post: post])
+        layout_content = EEx.eval_file(Path.join([root_dir, config.layout]), assigns: [content: post_content])
+        {post, layout_content}
       end)
     end)
     |> Enum.map(&Task.await/1)

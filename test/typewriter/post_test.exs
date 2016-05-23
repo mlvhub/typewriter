@@ -12,6 +12,6 @@ defmodule Typewriter.PostTest do
     assert post.description == "The first post is about one topic."
     assert post.tags == ["swift", "ios", "tdd"]
     assert post.content != nil
-    assert post.creation_date != nil
+    assert post.creation_date == "2016-04-24"
   end
 end

@@ -2,7 +2,7 @@ defmodule Typewriter.Config do
 
   alias Typewriter.Yaml
 
-  defstruct tags: [], post_template: nil, posts_template: nil, posts_dir: nil
+  defstruct tags: [], post_template: nil, posts_template: nil, posts_dir: nil, layout: nil
 
   @file_path "config.yaml"
 
@@ -17,6 +17,7 @@ defmodule Typewriter.Config do
     config = %Typewriter.Config{
       tags: Yaml.get_tags(yaml),
       posts_template: Yaml.get_prop(yaml, "posts_template"),
+      layout: Yaml.get_prop(yaml, "layout"),
       post_template: Yaml.get_prop(yaml, "post_template"),
       posts_dir: Yaml.get_prop(yaml, "posts_dir"),
     }
