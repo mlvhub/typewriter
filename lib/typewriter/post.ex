@@ -3,7 +3,7 @@ defmodule Typewriter.Post do
   alias Typewriter.Yaml
 
   @derive [Poison.Encoder]
-  defstruct slug: nil, title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author: nil
+  defstruct slug: nil, title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author: nil, cover_image: nil
 
   # Agent API
 
@@ -12,7 +12,15 @@ defmodule Typewriter.Post do
   end
 
   def add(post) do
-    Agent.update(__MODULE__, fn posts -> [post | posts] end)
+    Agent.get_and_update(__MODULE__, fn posts ->
+      filtered_posts = posts |> Enum.filter(fn p -> p.title != post.title end)
+      {post, [post | filtered_posts]}
+    end)
+  end
+
+  def get_by_title(post_title) do
+    list
+    |> Enum.filter(fn post -> post.title == post_title end)
   end
 
   def list do
@@ -30,6 +38,7 @@ defmodule Typewriter.Post do
     |> File.read!
     |> split
     |> extract(post)
+    |> add
   end
 
   defp file_to_slug(file) do
@@ -46,8 +55,10 @@ defmodule Typewriter.Post do
       title: Yaml.get_prop(props, "title"),
       creation_date: Yaml.get_prop(props, "creation_date"),
       description: Yaml.get_prop(props, "description"),
+      author: Yaml.get_prop(props, "author"),
       content: content,
       sanitized_content: HtmlSanitizeEx.strip_tags(content),
+      cover_image: Yaml.get_prop(props, "cover_image"),
       tags: Yaml.get_tags(props),
     }
   end
@@ -55,7 +66,7 @@ defmodule Typewriter.Post do
 end
 
 defimpl Poison.Encoder, for: Typewriter.Post do
-  def encode(%Typewriter.Post{title: title, sanitized_content: body, author: author}, options) do
-    Poison.Encoder.Map.encode(%{title: title, body: body, author: author}, options)
+  def encode(%Typewriter.Post{title: title, sanitized_content: body, author: author, tags: tags}, options) do
+    Poison.Encoder.Map.encode(%{title: title, body: body, author: author, tags: tags}, options)
   end
 end

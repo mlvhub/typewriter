@@ -5,6 +5,7 @@ description: The first post is about one topic.
 tags: swift, ios,tdd
 layout: test/layout
 author: mlopez
+cover_image: images/dummy.png
 ---
 
 This post is written in **Markdown**.

@@ -64,22 +64,24 @@ defmodule Typewriter.FileSystem do
         |> Enum.map(fn f -> Path.join([full_path, f]) end)
         |> Enum.flat_map(fn x -> handle_file(new_build_full_path, x, tasks) end)
       Enum.member?(@ignored_extensions, Path.extname(full_path)) ->
+        IO.puts full_path
         tasks
       Path.extname(full_path) == ".md" ->
         # compile the markdown to html
         task = Task.async(fn ->
           post = Typewriter.Post.compile(full_path)
-          Typewriter.Post.add(post)
           # if there is no posts_dir in the config file, we'll use the first markdown as a default
           if (Typewriter.Config.get.posts_dir == nil) do
             Typewriter.Config.update(%{posts_dir: build_full_path})
           end
+          IO.puts full_path
         end)
         [task | tasks]
       true ->
         # just copy the file
         task = Task.async(fn ->
           File.copy!(full_path, new_build_full_path)
+          IO.puts full_path
         end)
         [task | tasks]
     end

@@ -6,6 +6,11 @@ defmodule Typewriter.PostTest do
 
   @path1 "test/sample_files/first-post.md"
 
+  setup do
+    Post.start_link
+    :ok
+  end
+
   test "should convert a filepath to slug correctly" do
     post = Post.compile(@path1)
     assert post.title == "First post"
@@ -15,5 +20,13 @@ defmodule Typewriter.PostTest do
     assert post.sanitized_content != nil
     assert post.creation_date == "2016-04-24"
     assert post.author == "mlopez"
+    assert post.cover_image == "images/dummy.png"
+  end
+
+  test "should not add repeated posts" do
+    Post.compile(@path1)
+    Post.compile(@path1)
+
+    assert Post.list |> Enum.count == 1
   end
 end
