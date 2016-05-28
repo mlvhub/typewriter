@@ -18,7 +18,7 @@ defmodule Typewriter.ConfigTest do
     assert config.post_template == "templates/post.html.eex"
     assert config.posts_template == "templates/posts.html.eex"
     assert config.posts_dir == "posts"
-    assert config.layout == "templates/layout.html.eex"
+    assert config.layout_template == "templates/layout.html.eex"
   end
 
   test "updating a value from the config should work" do
@@ -28,6 +28,6 @@ defmodule Typewriter.ConfigTest do
     assert config.post_template == "templates/post.html.eex"
     assert config.posts_template == "templates/posts.html.eex"
     assert config.posts_dir == "new_posts_dir"
-    assert config.layout == "templates/layout.html.eex"
+    assert config.layout_template == "templates/layout.html.eex"
   end
 end
