@@ -1,4 +1,5 @@
 defmodule Typewriter.FileSystem do
+  require EEx
 
   @build_folder "typewriter_build"
   @ignored_folders [@build_folder, "templates"]
