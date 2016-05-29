@@ -40,7 +40,8 @@ The directory where your posts are located.
 - [ ] Test the file system related logic.
 - [ ] Report an error when there is an empty property in a post. Issue: The tasks just timeout otherwise.
 - [ ] Wipe out every saved post before or after every build. Issue: When deleting a post file, the post still remains stored in the post agent in subsequent builds.
-- [ ] Create an executable of the builder for simple usage with escript.
+- [ ] Create an executable of the builder for simple usage with escript. Note: Already added escript, but the generation gives an error related to EEx, gotta find out what's going on.
 - [ ] Finish documenting the library's usage
 - [ ] Make sure the layout functionality is working fine. Feature: If the layout property is not specified in the post's frontmatter, the config one should be used.
 - [ ] Define defaults for the config file.
+- [ ] Expand the author support, in order to have a full description, social links, and a picture.
