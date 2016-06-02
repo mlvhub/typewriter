@@ -19,8 +19,9 @@ defmodule Typewriter.FileSystem do
     Post.clear
     build_path = clean(root_dir)
 
-    handle_file(build_path, root_dir, [])
-    |> Enum.map(&Task.await/1)
+    build_path
+    |> handle_file(root_dir, [])
+    |> Enum.forEach(&Task.await/1)
 
     write_posts_file(build_path, root_dir)
     write_post_file(build_path, root_dir)
@@ -74,10 +75,6 @@ defmodule Typewriter.FileSystem do
         # compile the markdown to html
         task = Task.async(fn ->
           post = Typewriter.Post.compile(full_path)
-          # if there is no posts_dir in the config file, we'll use the first markdown as a default
-          if (config.posts_dir == nil) do
-            config.update(%{posts_dir: build_full_path})
-          end
         end)
         [task | tasks]
       Enum.member?(@ignored_extensions, Path.extname(full_path)) ->

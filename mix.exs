@@ -34,6 +34,7 @@ defmodule Typewriter.Mixfile do
       {:yamerl, github: "yakaz/yamerl"},
       {:poison, "~> 2.0"},
       {:html_sanitize_ex, "~> 1.0.0"},
+      {:credo, "~> 0.3", only: [:dev, :test]},
     ]
   end
 end
