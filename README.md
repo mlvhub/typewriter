@@ -38,7 +38,7 @@ The directory where your posts are located.
 
 ## TODO Checklist
 - [X] Add an option in the config file to be able to ignore files and folders.
-- [~] Define defaults for the config file.
+- [ ] Define defaults for the config file.
 - [ ] Test the file system related logic.
 - [ ] Report an error when there is an empty property in a post. Issue: The tasks just timeout otherwise.
 - [X] Wipe out every saved post before or after every build. Issue: When deleting a post file, the post still remains stored in the post agent in subsequent builds.
