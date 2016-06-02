@@ -3,3 +3,5 @@ posts_dir: posts
 post_template: templates/post.html.eex
 posts_template: templates/posts.html.eex
 layout_template: templates/layout.html.eex
+ignored_dirs: .git
+ignored_files: README.md

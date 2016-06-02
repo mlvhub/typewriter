@@ -27,6 +27,11 @@ defmodule Typewriter.Post do
     Agent.get(__MODULE__, &(&1))
   end
 
+  def clear do
+    IO.puts "clear"
+    Agent.update(__MODULE__, fn _ -> [] end)
+  end
+
   # Markdown handling
 
   def compile(file_path) do
@@ -59,7 +64,7 @@ defmodule Typewriter.Post do
       content: content,
       sanitized_content: HtmlSanitizeEx.strip_tags(content),
       cover_image: Yaml.get_prop(props, "cover_image"),
-      tags: Yaml.get_tags(props),
+      tags: Yaml.get_list(props, "tags"),
     }
   end
 

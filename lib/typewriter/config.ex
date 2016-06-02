@@ -2,7 +2,7 @@ defmodule Typewriter.Config do
 
   alias Typewriter.Yaml
 
-  defstruct tags: [], post_template: nil, posts_template: nil, posts_dir: nil, layout_template: nil
+  defstruct tags: [], post_template: nil, posts_template: nil, posts_dir: nil, layout_template: nil, ignored_dirs: [], ignored_files: []
 
   @file_path "config.yaml"
 
@@ -15,13 +15,15 @@ defmodule Typewriter.Config do
   def init(root_dir) do
     yaml = Yaml.compile(Path.join([root_dir, @file_path]))
     config = %Typewriter.Config{
-      tags: Yaml.get_tags(yaml),
+      tags: Yaml.get_list(yaml, "tags"),
+      ignored_files: Yaml.get_list(yaml, "ignored_files"),
+      ignored_dirs: Yaml.get_list(yaml, "ignored_dirs"),
       posts_template: Yaml.get_prop(yaml, "posts_template"),
       layout_template: Yaml.get_prop(yaml, "layout_template"),
       post_template: Yaml.get_prop(yaml, "post_template"),
       posts_dir: Yaml.get_prop(yaml, "posts_dir"),
     }
-    Agent.update(__MODULE__, fn _ -> config end)
+    update(config)
   end
 
   def get do

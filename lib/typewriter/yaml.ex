@@ -9,16 +9,16 @@ defmodule Typewriter.Yaml do
     parsed
   end
 
-  def get_prop(props, key) do
+  def get_prop(props, key, default \\ nil) do
     case :proplists.get_value(String.to_char_list(key), props) do
-      :undefined -> nil
+      :undefined -> default
       x -> to_string(x)
     end
   end
 
-  def get_tags(props) do
+  def get_list(props, key) do
     props
-    |> get_prop("tags")
+    |> get_prop(key, "")
     |> String.split([" ", ","])
     |> Enum.filter(fn x -> x != "" end)
   end

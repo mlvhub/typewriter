@@ -8,6 +8,6 @@ defmodule Typewriter.YamlTest do
 
   test "should load the yaml values correctly" do
     yaml = Yaml.compile(@path1)
-    assert Yaml.get_tags(yaml) == ["swift", "ios", "tdd", "elixir", "phoenix"]
+    assert Yaml.get_list(yaml, "tags") == ["swift", "ios", "tdd", "elixir", "phoenix"]
   end
 end

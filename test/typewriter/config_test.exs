@@ -18,6 +18,8 @@ defmodule Typewriter.ConfigTest do
     assert config.post_template == "templates/post.html.eex"
     assert config.posts_template == "templates/posts.html.eex"
     assert config.posts_dir == "posts"
+    assert config.ignored_dirs == [".git"]
+    assert config.ignored_files == ["README.md"]
     assert config.layout_template == "templates/layout.html.eex"
   end
 
@@ -28,6 +30,8 @@ defmodule Typewriter.ConfigTest do
     assert config.post_template == "templates/post.html.eex"
     assert config.posts_template == "templates/posts.html.eex"
     assert config.posts_dir == "new_posts_dir"
+    assert config.ignored_dirs == [".git"]
+    assert config.ignored_files == ["README.md"]
     assert config.layout_template == "templates/layout.html.eex"
   end
 end

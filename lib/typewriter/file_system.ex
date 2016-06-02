@@ -1,18 +1,23 @@
 defmodule Typewriter.FileSystem do
   require EEx
 
-  @build_folder "typewriter_build"
-  @ignored_folders [@build_folder, "templates"]
-  @ignored_extensions ["eex", "yaml"]
+  alias Typewriter.Post
+  alias Typewriter.Config
 
-  def clean_build_folder(build_path) do
-    File.rm_rf!(build_path)
-    File.mkdir!(build_path)
+  @build_dir "typewriter_build"
+  @ignored_dirs [@build_dir, "templates"]
+  @ignored_extensions [".eex", ".yaml"]
+
+  def clean(root_dir) do
+    build_path = Path.join([root_dir, @build_dir])
+    clean_build_dir(build_path)
+    build_path
   end
 
   def build(root_dir) do
-    build_path = Path.join([root_dir, @build_folder])
-    clean_build_folder(build_path)
+    # Ensure a clean start
+    Post.clear
+    build_path = clean(root_dir)
 
     handle_file(build_path, root_dir, [])
     |> Enum.map(&Task.await/1)
@@ -22,7 +27,7 @@ defmodule Typewriter.FileSystem do
   end
 
   def write_posts_file(build_path, root_dir) do
-    config = Typewriter.Config.get
+    config = Config.get
     contents = EEx.eval_file(Path.join([root_dir, config.posts_template]), assigns: [posts: Typewriter.Post.list])
     new_path = Path.join([build_path, Path.basename(root_dir), Path.basename(config.posts_template, ".eex")])
     File.write!(new_path, contents)
@@ -54,6 +59,7 @@ defmodule Typewriter.FileSystem do
 
   def handle_file(build_full_path, full_path, tasks) do
     new_build_full_path = Path.join([build_full_path, Path.basename(full_path)])
+    config = Typewriter.Config.get
     cond do
       File.dir?(full_path) ->
         # copy the dir and handle the dir's children remotely
@@ -61,31 +67,35 @@ defmodule Typewriter.FileSystem do
         # prepare dir children and their paths
         full_path
         |> File.ls!
-        |> Enum.filter(fn f -> !Enum.member?(@ignored_folders, f) end)
+        |> Enum.filter(fn f -> !Enum.member?(Enum.concat(@ignored_dirs, config.ignored_dirs), f) end)
         |> Enum.map(fn f -> Path.join([full_path, f]) end)
         |> Enum.flat_map(fn x -> handle_file(new_build_full_path, x, tasks) end)
-      Enum.member?(@ignored_extensions, Path.extname(full_path)) ->
-        IO.puts full_path
-        tasks
       Path.extname(full_path) == ".md" ->
         # compile the markdown to html
         task = Task.async(fn ->
           post = Typewriter.Post.compile(full_path)
           # if there is no posts_dir in the config file, we'll use the first markdown as a default
-          if (Typewriter.Config.get.posts_dir == nil) do
-            Typewriter.Config.update(%{posts_dir: build_full_path})
+          if (config.posts_dir == nil) do
+            config.update(%{posts_dir: build_full_path})
           end
-          IO.puts full_path
         end)
         [task | tasks]
+      Enum.member?(@ignored_extensions, Path.extname(full_path)) ->
+        tasks
+      Enum.member?(config.ignored_files, Path.basename(full_path)) ->
+        tasks
       true ->
         # just copy the file
         task = Task.async(fn ->
           File.copy!(full_path, new_build_full_path)
-          IO.puts full_path
         end)
         [task | tasks]
     end
+  end
+
+  defp clean_build_dir(build_path) do
+    File.rm_rf!(build_path)
+    File.mkdir!(build_path)
   end
 
 end
