@@ -15,9 +15,9 @@ defmodule Typewriter do
     Supervisor.start_link(children, opts)
   end
 
-  def build(root_dir) do
+  def generate(root_dir) do
     Supervisor.start_child(Typewriter.Supervisor, [])
     Typewriter.Config.init(root_dir)
-    Typewriter.FileSystem.build(root_dir)
+    Typewriter.FileSystem.generate(root_dir)
   end
 end

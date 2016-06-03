@@ -11,7 +11,7 @@ defmodule Typewriter.PostTest do
     :ok
   end
 
-  test "should convert a filepath to slug correctly" do
+  test "should compile a blog post correctly" do
     post = Post.compile(@path1)
     assert post.title == "First post"
     assert post.description == "The first post is about one topic."

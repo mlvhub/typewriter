@@ -4,7 +4,7 @@ defmodule Typewriter.CLI do
     args
     |> parse_args
     |> response
-    |> IO.inspect
+    |> output
   end
 
   defp parse_args(args) do
@@ -15,8 +15,12 @@ defmodule Typewriter.CLI do
     {opts, List.to_string(project_path)}
   end
 
-  defp response({opts, project_path}) do
-    Typewriter.build(project_path)
+  defp response({_opts, project_path}) do
+    Typewriter.generate(project_path)
+  end
+
+  def output(_result) do
+    ""
   end
 
 end
