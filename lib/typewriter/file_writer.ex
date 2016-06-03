@@ -9,7 +9,6 @@ defmodule Typewriter.FileWriter do
 
   def write_post_files(root_dir, full_path, new_build_full_path) do
     config = Typewriter.Config.get
-    IO.puts "F: #{full_path} - N: #{new_build_full_path}"
     Task.async(fn ->
       post = Typewriter.Post.compile(full_path)
 
@@ -18,8 +17,6 @@ defmodule Typewriter.FileWriter do
 
       new_html_path = new_post_path(new_build_full_path, ".html")
       new_json_path = new_post_path(new_build_full_path, ".json")
-
-      IO.puts "H: #{new_html_path} - J: #{new_json_path}"
 
       File.write!(new_html_path, template_content)
       File.write!(new_json_path, json_content)

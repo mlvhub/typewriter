@@ -53,6 +53,7 @@ A default layout file to use throughout the EEx files evaluation.
 The directory where your posts are located.
 
 ## TODO Checklist
+- [ ] Improve the CLI Usability
 - [ ] Add moduletags to every module
 - [X] Simplify the FileSystem module
 - [ ] Define defaults for the config file.
