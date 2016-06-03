@@ -15,7 +15,7 @@ defmodule Typewriter.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :yamerl],
+    [applications: [:logger, :yamerl, :eex],
      mod: {Typewriter, []}]
   end
 

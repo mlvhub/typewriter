@@ -1,5 +1,4 @@
 defmodule Typewriter.FileSystem do
-  require EEx
 
   alias Typewriter.Post
   alias Typewriter.Config
@@ -21,7 +20,7 @@ defmodule Typewriter.FileSystem do
 
     build_path
     |> handle_file(root_dir, [])
-    |> Enum.forEach(&Task.await/1)
+    |> Enum.each(&Task.await/1)
 
     write_posts_file(build_path, root_dir)
     write_post_file(build_path, root_dir)
@@ -74,7 +73,7 @@ defmodule Typewriter.FileSystem do
       Path.extname(full_path) == ".md" ->
         # compile the markdown to html
         task = Task.async(fn ->
-          post = Typewriter.Post.compile(full_path)
+          Typewriter.Post.compile(full_path)
         end)
         [task | tasks]
       Enum.member?(@ignored_extensions, Path.extname(full_path)) ->

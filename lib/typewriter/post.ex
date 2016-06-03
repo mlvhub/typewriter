@@ -28,7 +28,6 @@ defmodule Typewriter.Post do
   end
 
   def clear do
-    IO.puts "clear"
     Agent.update(__MODULE__, fn _ -> [] end)
   end
 

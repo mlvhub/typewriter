@@ -4,7 +4,7 @@ defmodule Typewriter.CLI do
     args
     |> parse_args
     |> response
-    |> IO.puts
+    |> IO.inspect
   end
 
   defp parse_args(args) do
