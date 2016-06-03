@@ -4,6 +4,16 @@ An extremely simple static site generator, with a few conventions.
 
 ## Installation
 
+If you only want to run the script without much hassle, just run:
+
+        mix escript.install https://github.com/mlvhub/typewriter/raw/master/typewriter
+
+Otherwise, you can clone and setup the project yourself, then run:
+
+        mix escript.build
+
+To generate the Typewriter script.
+
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
 
   1. Add typewriter to your list of dependencies in `mix.exs`:
@@ -17,6 +27,12 @@ If [available in Hex](https://hex.pm/docs/publish), the package can be installed
         def application do
           [applications: [:typewriter]]
         end
+
+## Usage:
+
+### Using the Script
+
+`typewriter $PROJECT_PATH`
 
 ## Post Frontmatter Properties
 TODO
