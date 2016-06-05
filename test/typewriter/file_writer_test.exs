@@ -17,7 +17,7 @@ defmodule Typewriter.FileWriterTest do
   description: "The first post is about one topic.",
   sanitized_content: "This post is written in Markdown.A header2 is goodLists are nice, too:Apples\nBananas\nPears\nHome",
   tags: ["swift", "ios", "tdd"], title: "First post"}]
-  @path1 "test/sample_files/first-post.md"
+  @path1 "sample_project/posts/first-post.md"
 
   setup do
     Typewriter.Config.init(@root)
@@ -25,8 +25,6 @@ defmodule Typewriter.FileWriterTest do
 
     on_exit fn ->
       Agent.stop(Typewriter.Config)
-      File.rm_rf!(String.replace(@path1, ".md", ".html"))
-      File.rm_rf!(String.replace(@path1, ".md", ".json"))
     end
 
     {:ok, config: config}
@@ -45,5 +43,8 @@ defmodule Typewriter.FileWriterTest do
     Task.await(task)
     assert File.exists?(String.replace(@path1, ".md", ".html"))
     assert File.exists?(String.replace(@path1, ".md", ".json"))
+    # Delete the created files
+    File.rm_rf!(String.replace(@path1, ".md", ".html"))
+    File.rm_rf!(String.replace(@path1, ".md", ".json"))
   end
 end
