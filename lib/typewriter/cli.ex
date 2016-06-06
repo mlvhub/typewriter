@@ -10,17 +10,18 @@ defmodule Typewriter.CLI do
   defp parse_args(args) do
     {opts, project_path, _} =
       args
-      |> OptionParser.parse(switches: [])
+      |> OptionParser.parse(switches: [port: :number])
 
     {opts, List.to_string(project_path)}
   end
 
-  defp response({_opts, project_path}) do
-    Typewriter.generate(project_path)
+  defp response({opts, project_path}) do
+    IO.puts "#{opts[:port]}"
+    Typewriter.run(project_path, opts[:port])
   end
 
   def output(_result) do
-    ""
+    :timer.sleep(:infinity)
   end
 
 end

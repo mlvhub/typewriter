@@ -15,7 +15,7 @@ defmodule Typewriter.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :yamerl, :eex],
+    [applications: [:logger, :yamerl, :eex, :cowboy],
      mod: {Typewriter, []}]
   end
 
@@ -35,6 +35,7 @@ defmodule Typewriter.Mixfile do
       {:poison, "~> 2.0"},
       {:html_sanitize_ex, "~> 1.0.0"},
       {:credo, "~> 0.3", only: [:dev, :test]},
+      {:cowboy, "~> 1.0.3"},
     ]
   end
 end

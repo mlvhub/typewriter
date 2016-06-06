@@ -19,6 +19,7 @@ defmodule Typewriter.FileSystem do
     build_path = Path.join([root_dir, @build_dir])
     clean_build_dir(build_path)
     Post.clear
+
     build_path
   end
 
@@ -30,6 +31,8 @@ defmodule Typewriter.FileSystem do
 
     posts = Post.list
     FileWriter.write_posts_file(build_path, root_dir, posts)
+
+    _final_path = Path.join([build_path, Path.basename(root_dir)])
   end
   
   def handle_file(root_dir, build_full_path, full_path, tasks) do

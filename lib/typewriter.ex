@@ -15,9 +15,18 @@ defmodule Typewriter do
     Supervisor.start_link(children, opts)
   end
 
+  def run(root_dir, port) do
+    dir_path = generate(root_dir)
+    start_server(dir_path, port)
+  end
+
   def generate(root_dir) do
     Supervisor.start_child(Typewriter.Supervisor, [])
     Typewriter.Config.init(root_dir)
     Typewriter.FileSystem.generate(root_dir)
+  end
+
+  def start_server(root_dir, port \\ 8000) do
+    Typewriter.Server.start(root_dir)
   end
 end

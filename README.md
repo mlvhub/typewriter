@@ -53,15 +53,16 @@ A default layout file to use throughout the EEx files evaluation.
 The directory where your posts are located.
 
 ## TODO Checklist
-- [ ] Improve the CLI Usability
-- [ ] Add moduletags to every module
-- [X] Simplify the FileSystem module
+- [ ] Add a Logger module to improve visiblity of what's being done.
+- [ ] Improve the CLI Usability.
+- [ ] Add moduletags to every module.
+- [X] Simplify the FileSystem module.
 - [ ] Define defaults for the config file.
 - [X] Test the file system related logic.
 - [X] Add an option in the config file to be able to ignore files and folders.
 - [ ] Report an error when there is an empty property in a post. Issue: The tasks just timeout otherwise.
 - [X] Wipe out every saved post before or after every build. Issue: When deleting a post file, the post still remains stored in the post agent in subsequent builds.
 - [X] Create an executable of the builder for simple usage with escript. Note: Already added escript, but the generation gives an error related to EEx, gotta find out what's going on.
-- [ ] Finish documenting the library's usage
+- [ ] Finish documenting the library's usage.
 - [ ] Make sure the layout functionality is working fine. Feature: If the layout property is not specified in the post's frontmatter, the config one should be used.
 - [ ] Expand the author support, in order to have a full description, social links, and a picture.
