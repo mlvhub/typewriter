@@ -2,7 +2,7 @@ defmodule Typewriter.Config do
 
   alias Typewriter.Yaml
 
-  defstruct tags: [], post_template: nil, posts_template: nil, posts_dir: nil, layout_template: nil, ignored_dirs: [], ignored_files: []
+  defstruct tags: [], post_template: "templates/post.html.eex", posts_template: "templates/posts.html.eex", posts_dir: "posts", layout_template: "templates/layout.html.eex", ignored_dirs: [], ignored_files: []
 
   @file_path "config.yaml"
 
@@ -23,7 +23,11 @@ defmodule Typewriter.Config do
       post_template: Yaml.get_prop(yaml, "post_template"),
       posts_dir: Yaml.get_prop(yaml, "posts_dir"),
     }
-    update(config)
+    config
+    |> Map.from_struct
+    |> Enum.reject(fn {_, v} -> v == nil end)
+    |> Enum.into(%{})
+    |> update
   end
 
   def get do
