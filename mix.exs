@@ -6,6 +6,7 @@ defmodule Typewriter.Mixfile do
      version: "0.0.1",
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
+     test_coverage: [tool: ExCoveralls],
      start_permanent: Mix.env == :prod,
      escript: [main_module: Typewriter.CLI],
      deps: deps]
@@ -36,6 +37,7 @@ defmodule Typewriter.Mixfile do
       {:html_sanitize_ex, "~> 1.0.0"},
       {:credo, "~> 0.3", only: [:dev, :test]},
       {:cowboy, "~> 1.0.3"},
+      {:excoveralls, "~> 0.4", only: :test},
     ]
   end
 end

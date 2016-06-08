@@ -66,14 +66,13 @@ A list of files you want to be ignored.
 **Default:** `"[]"`
 
 ## TODO Checklist
-- [ ] Add a Logger module to improve visiblity of what's being done.
+- [ ] Add a Logger module to improve visiblity of what's being done and show errors.
 - [ ] Improve the CLI Usability.
 - [ ] Add moduletags to every module.
 - [X] Simplify the FileSystem module.
 - [X] Define defaults for the config file.
 - [X] Test the file system related logic.
 - [X] Add an option in the config file to be able to ignore files and folders.
-- [ ] Report an error when there is an empty property in a post. Issue: The tasks just timeout otherwise.
 - [X] Wipe out every saved post before or after every build. Issue: When deleting a post file, the post still remains stored in the post agent in subsequent builds.
 - [X] Create an executable of the builder for simple usage with escript. Note: Already added escript, but the generation gives an error related to EEx, gotta find out what's going on.
 - [ ] Finish documenting the library's usage.
