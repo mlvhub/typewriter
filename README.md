@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mlvhub/typewriter.svg?branch=master)](https://travis-ci.org/mlvhub/typewriter)
+
 # Typewriter
 
 An extremely simple static site generator, with a few conventions.
