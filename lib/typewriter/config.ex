@@ -23,6 +23,7 @@ defmodule Typewriter.Config do
       post_template: Yaml.get_prop(yaml, "post_template"),
       posts_dir: Yaml.get_prop(yaml, "posts_dir"),
     }
+
     config
     |> Map.from_struct
     |> Enum.reject(fn {_, v} -> v == nil end)
