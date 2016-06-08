@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/mlvhub/typewriter.svg?branch=master)](https://travis-ci.org/mlvhub/typewriter)
+[![Build Status](https://travis-ci.org/mlvhub/typewriter.svg?branch=master)](https://travis-ci.org/mlvhub/typewriter) [![Coverage Status](https://coveralls.io/repos/github/mlvhub/typewriter/badge.svg?branch=master)](https://coveralls.io/github/mlvhub/typewriter?branch=master)
 
 # Typewriter
 
