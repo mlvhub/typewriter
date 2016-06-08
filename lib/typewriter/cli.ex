@@ -4,19 +4,24 @@ defmodule Typewriter.CLI do
     args
     |> parse_args
     |> response
-    |> IO.inspect
+    |> output
   end
 
   defp parse_args(args) do
     {opts, project_path, _} =
       args
-      |> OptionParser.parse(switches: [])
+      |> OptionParser.parse(switches: [port: :number])
 
     {opts, List.to_string(project_path)}
   end
 
   defp response({opts, project_path}) do
-    Typewriter.build(project_path)
+    IO.puts "#{opts[:port]}"
+    Typewriter.run(project_path, opts[:port])
+  end
+
+  def output(_result) do
+    :timer.sleep(:infinity)
   end
 
 end

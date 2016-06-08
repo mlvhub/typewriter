@@ -8,10 +8,8 @@
   <main>
   <%= for post <- @posts do %>
     <article class="row">
-      <h2><a href="/posts/<%= post.slug %>"></a><%= post.title %></h2>
       <p><%= post.creation_date %></p>
       <p><%= post.description %></p>
-      <p><a href="/posts/<%= post.slug %>">Read more...</a></p>
     </article>
   <% end %>
   </main>

@@ -3,7 +3,7 @@ defmodule Typewriter.Post do
   alias Typewriter.Yaml
 
   @derive [Poison.Encoder]
-  defstruct slug: nil, title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author: nil, cover_image: nil
+  defstruct title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author: nil, cover_image: nil, slug: nil
 
   # Agent API
 
@@ -35,7 +35,7 @@ defmodule Typewriter.Post do
 
   def compile(file_path) do
     post = %Typewriter.Post{
-      slug: file_path |> Path.basename |> file_to_slug
+      slug: Path.basename(file_path, Path.extname(file_path))
     }
 
     file_path
@@ -43,10 +43,6 @@ defmodule Typewriter.Post do
     |> split
     |> extract(post)
     |> add
-  end
-
-  defp file_to_slug(file) do
-    String.replace(file, ~r/\.md$/, "")
   end
 
   defp split(data) do
