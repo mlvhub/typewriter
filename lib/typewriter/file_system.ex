@@ -29,7 +29,7 @@ defmodule Typewriter.FileSystem do
     |> handle_file(build_path, root_dir, [])
     |> Enum.each(&Task.await/1)
 
-    posts = Post.list
+    posts = Post.ordered_list
     FileWriter.write_posts_file(build_path, root_dir, posts)
 
     _final_path = Path.join([build_path, Path.basename(root_dir)])

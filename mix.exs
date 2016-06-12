@@ -16,7 +16,7 @@ defmodule Typewriter.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :yamerl, :eex, :cowboy],
+    [applications: [:logger, :yamerl, :eex, :cowboy, :timex],
      mod: {Typewriter, []}]
   end
 
@@ -32,6 +32,8 @@ defmodule Typewriter.Mixfile do
   defp deps do
     [
       {:earmark, "~> 0.2.0"},
+      {:tzdata, "== 0.1.8", override: true},
+      {:timex, "~> 2.1.4"},
       {:yamerl, github: "yakaz/yamerl"},
       {:poison, "~> 2.0"},
       {:html_sanitize_ex, "~> 1.0.0"},

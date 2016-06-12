@@ -27,6 +27,15 @@ defmodule Typewriter.Post do
     Agent.get(__MODULE__, &(&1))
   end
 
+  def ordered_list do
+    list
+    |> Enum.sort(fn a, b ->
+      d1 = Timex.parse!(a.creation_date, "{ISOdate}")
+      d2 = Timex.parse!(b.creation_date, "{ISOdate}")
+      Timex.compare(d1, d2) > 0
+    end)
+  end
+
   def clear do
     Agent.update(__MODULE__, fn _ -> [] end)
   end
