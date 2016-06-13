@@ -15,7 +15,7 @@ defmodule Typewriter do
     Supervisor.start_link(children, opts)
   end
 
-  def run(root_dir, port) do
+  def run(root_dir, port \\ 8000) do
     dir_path = generate(root_dir)
     start_server(dir_path, port)
   end
