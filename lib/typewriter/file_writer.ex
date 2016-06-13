@@ -42,7 +42,7 @@ defmodule Typewriter.FileWriter do
 
   defp evaluate_templates(root_dir, config, post) do
     # Evaluate the post template
-    post_content = EEx.eval_file(Path.join([root_dir, config.post_template]), assigns: [post: post])
+    post_content = EEx.eval_file(Path.join([root_dir, config.post_template]), assigns: [post: post, recommended_posts: Typewriter.Post.recommend(post)])
     # Evaluate the layout template, by giving it the evaluated post template
     layout_content = EEx.eval_file(Path.join([root_dir, config.layout_template]), assigns: [content: post_content])
 

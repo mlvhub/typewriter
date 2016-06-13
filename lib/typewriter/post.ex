@@ -18,6 +18,18 @@ defmodule Typewriter.Post do
     end)
   end
 
+  def recommend(post, amount \\ 5) do
+    list
+    |> Enum.reject(fn p -> p.slug == post.slug end)
+    |> Enum.map(fn p ->
+      intersection = MapSet.intersection(MapSet.new(p.tags), MapSet.new(post.tags))
+      {p, MapSet.size(intersection)}
+    end)
+    |> Enum.sort(fn {_, int1}, {_, int2} -> int1 > int2 end)
+    |> Enum.take(amount)
+    |> Enum.map(fn {p, _} -> p end)
+  end
+
   def get_by_title(post_title) do
     list
     |> Enum.filter(fn post -> post.title == post_title end)
