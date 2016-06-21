@@ -5,6 +5,8 @@ defmodule Typewriter.Post do
   @derive [Poison.Encoder]
   defstruct title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author: nil, cover_image: nil, slug: nil
 
+  @reject_characters ["", " ", "-", ",", "."]
+
   # Agent API
 
   def start_link do
@@ -16,6 +18,13 @@ defmodule Typewriter.Post do
       filtered_posts = posts |> Enum.filter(fn p -> p.title != post.title end)
       {post, [post | filtered_posts]}
     end)
+  end
+
+  def word_count(post) do
+    post.sanitized_content
+    |> String.split
+    |> Enum.reject(fn str -> Enum.member?(@reject_characters, str) end)
+    |> Enum.count
   end
 
   def recommend(post, amount \\ 5) do
@@ -78,7 +87,7 @@ defmodule Typewriter.Post do
       description: Yaml.get_prop(props, "description"),
       author: Yaml.get_prop(props, "author"),
       content: content,
-      sanitized_content: HtmlSanitizeEx.strip_tags(content),
+      sanitized_content: content |> String.replace("\n", " ") |> HtmlSanitizeEx.strip_tags,
       cover_image: Yaml.get_prop(props, "cover_image"),
       tags: Yaml.get_list(props, "tags"),
     }

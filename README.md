@@ -70,5 +70,4 @@ A list of files you want to be ignored.
 - [ ] Improve the CLI Usability.
 - [ ] Add moduletags to every module.
 - [ ] Finish documenting the library's usage.
-- [ ] Make sure the layout functionality is working fine. Feature: If the layout property is not specified in the post's frontmatter, the config one should be used.
 - [ ] Expand the author support, in order to have a full description, social links, and a picture.

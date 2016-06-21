@@ -29,4 +29,10 @@ defmodule Typewriter.PostTest do
 
     assert Post.list |> Enum.count == 1
   end
+
+  test "should count the post's word average correctly" do
+    post = Post.compile(@path1)
+
+    assert Post.word_count(post) > 0
+  end
 end
