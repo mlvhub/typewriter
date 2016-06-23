@@ -21,6 +21,7 @@ defmodule Typewriter.AuthorTest do
 
   test "should compile an author correctly" do
     author = Author.compile(@path1)
+    assert author.slug == "miguel-lopez"
     assert author.author_id == "mlopez150693"
     assert author.name == "Miguel López Valenciano"
     assert author.bio != nil

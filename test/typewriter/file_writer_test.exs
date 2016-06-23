@@ -6,12 +6,12 @@ defmodule Typewriter.FileWriterTest do
 
   @root "sample_project"
   @build "sample_project/typewriter_build"
-  @posts [%Typewriter.Post{author: nil,
+  @posts [%Typewriter.Post{author_id: nil,
   content: "<p>This post is also written in <strong>Markdown</strong>.</p>\n<p>A link: <a href=\"http://www.sebastianseilund.com\">Sebastian Seilund</a></p>\n<p><img src=\"/images/phoenix.png\" alt=\"phoenix\"/></p>\n",
   cover_image: nil, creation_date: nil, description: nil,
   sanitized_content: "This post is also written in Markdown.A link: Sebastian Seilund",
   tags: [], title: "Second post"},
- %Typewriter.Post{author: nil,
+ %Typewriter.Post{author_id: nil,
   content: "<p>This post is written in <strong>Markdown</strong>.</p>\n<h2>A header2 is good</h2>\n<p>Lists are nice, too:</p>\n<ul>\n<li>Apples\n</li>\n<li>Bananas\n</li>\n<li>Pears\n</li>\n</ul>\n<p><a href=\"/\" title=\"Home\">Home</a></p>\n",
   cover_image: nil, creation_date: "2016-04-24",
   description: "The first post is about one topic.",
@@ -32,14 +32,14 @@ defmodule Typewriter.FileWriterTest do
 
   @tag :skip
   test "should write posts file correctly", %{config: config} do
-    FileWriter.write_posts_file(@build, @root, @posts)
+    FileWriter.write_plural_file(@build, @root, config.posts_template, posts: @posts)
 
     template_file = Path.join([@build, @root, Path.basename(config.posts_template, ".eex")])
     assert File.exists?(template_file)
   end
 
   test "should write all post files correctly" do
-    task = FileWriter.write_post_files(@root, @path1, @path1)
+    task = FileWriter.write_post_file(@root, @path1, @path1)
     Task.await(task)
     assert File.exists?(String.replace(@path1, ".md", ".html"))
     assert File.exists?(String.replace(@path1, ".md", ".json"))

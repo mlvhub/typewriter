@@ -1,24 +1,46 @@
 defmodule Typewriter.FileWriter do
 
-  def write_posts_file(build_path, root_dir, posts) do
+  def write_plural_file(build_path, root_dir, template_file, assigns) do
     config = Typewriter.Config.get
-    contents = EEx.eval_file(Path.join([root_dir, config.posts_template]), assigns: [posts: posts])
-    new_path = Path.join([build_path, Path.basename(root_dir), Path.basename(config.posts_template, ".eex")])
+    contents = EEx.eval_file(Path.join([root_dir, template_file]), assigns: assigns)
+    new_path = Path.join([build_path, Path.basename(root_dir), Path.basename(template_file, Path.extname(template_file))])
     File.write!(new_path, contents)
   end
 
-  def write_post_files(root_dir, full_path, new_build_full_path) do
+  def write_author_file(root_dir, full_path, new_build_full_path) do
+    config = Typewriter.Config.get
+    Task.async(fn ->
+      author = Typewriter.Author.compile(full_path)
+
+      author_content = EEx.eval_file(Path.join([root_dir, config.author_template]), assigns: [author: author])
+
+      # Evaluate the layout template, by giving it the evaluated author template
+      layout_content = EEx.eval_file(Path.join([root_dir, config.layout_template]), assigns: [content: author_content])
+
+      new_html_path = new_singular_path(new_build_full_path, ".html")
+
+      File.write!(new_html_path, layout_content)
+
+      author
+    end)
+  end
+
+  def write_post_file(root_dir, full_path, new_build_full_path) do
     config = Typewriter.Config.get
     Task.async(fn ->
       post = Typewriter.Post.compile(full_path)
 
-      template_content = evaluate_templates(root_dir, config, post)
+      post_content = EEx.eval_file(Path.join([root_dir, config.post_template]), assigns: [post: post, recommended_posts: Typewriter.Post.recommend(post)])
+
+      # Evaluate the layout template, by giving it the evaluated post template
+      layout_content = EEx.eval_file(Path.join([root_dir, config.layout_template]), assigns: [content: post_content])
+
       json_content = Poison.encode!(post)
 
-      new_html_path = new_post_path(new_build_full_path, ".html")
-      new_json_path = new_post_path(new_build_full_path, ".json")
+      new_html_path = new_singular_path(new_build_full_path, ".html")
+      new_json_path = new_singular_path(new_build_full_path, ".json")
 
-      File.write!(new_html_path, template_content)
+      File.write!(new_html_path, layout_content)
       File.write!(new_json_path, json_content)
 
       post
@@ -40,16 +62,7 @@ defmodule Typewriter.FileWriter do
     end)
   end
 
-  defp evaluate_templates(root_dir, config, post) do
-    # Evaluate the post template
-    post_content = EEx.eval_file(Path.join([root_dir, config.post_template]), assigns: [post: post, recommended_posts: Typewriter.Post.recommend(post)])
-    # Evaluate the layout template, by giving it the evaluated post template
-    layout_content = EEx.eval_file(Path.join([root_dir, config.layout_template]), assigns: [content: post_content])
-
-    layout_content
-  end
-
-  defp new_post_path(new_build_full_path, ext) do
+  defp new_singular_path(new_build_full_path, ext) do
     Path.join(Path.dirname(new_build_full_path), Path.basename(new_build_full_path, Path.extname(new_build_full_path)) <> ext)
   end
 end

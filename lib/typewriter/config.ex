@@ -27,10 +27,13 @@ defmodule Typewriter.Config do
       tags: Yaml.get_list(yaml, "tags"),
       ignored_files: Yaml.get_list(yaml, "ignored_files"),
       ignored_dirs: Yaml.get_list(yaml, "ignored_dirs"),
-      posts_template: Yaml.get_prop(yaml, "posts_template"),
-      layout_template: Yaml.get_prop(yaml, "layout_template"),
       post_template: Yaml.get_prop(yaml, "post_template"),
+      posts_template: Yaml.get_prop(yaml, "posts_template"),
       posts_dir: Yaml.get_prop(yaml, "posts_dir"),
+      author_template: Yaml.get_prop(yaml, "author_template"),
+      authors_template: Yaml.get_prop(yaml, "authors_template"),
+      authors_dir: Yaml.get_prop(yaml, "authors_dir"),
+      layout_template: Yaml.get_prop(yaml, "layout_template"),
     }
 
     config
@@ -49,6 +52,10 @@ defmodule Typewriter.Config do
       Map.merge(stored_config, new_config)
     end)
     get
+  end
+
+  def clear do
+    Agent.update(__MODULE__, fn _ -> %Typewriter.Config{} end)
   end
 
 end

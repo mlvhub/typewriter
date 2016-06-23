@@ -3,7 +3,7 @@ defmodule Typewriter.Author do
   alias Typewriter.Yaml
 
   @derive [Poison.Encoder]
-  defstruct author_id: nil, name: nil, bio: nil, linked_in: nil, twitter: nil, github: nil, profile_picture: nil
+  defstruct author_id: nil, name: nil, bio: nil, linked_in: nil, twitter: nil, github: nil, profile_picture: nil, slug: nil
 
   # Agent API
 
@@ -34,7 +34,9 @@ defmodule Typewriter.Author do
   # Markdown handling
 
   def compile(file_path) do
-    author = %Typewriter.Author{}
+    author = %Typewriter.Author{
+      slug: Path.basename(file_path, Path.extname(file_path))
+    }
 
     file_path
     |> Yaml.compile

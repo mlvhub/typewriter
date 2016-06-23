@@ -50,6 +50,7 @@ defmodule Typewriter.PostTest do
 
   test "should not get author info if the author is not loaded or non existent" do
     post = Post.compile(@path1)
+    Typewriter.Author.start_link
 
     author = Post.author_info(post)
     assert author == nil
