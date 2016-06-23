@@ -11,6 +11,14 @@ defmodule Typewriter.PostTest do
     :ok
   end
 
+  test "should add and clear posts correctly" do
+    Post.compile(@path1)
+    assert Post.list |> Enum.count == 1
+
+    Post.clear
+    assert Post.list |> Enum.count == 0
+  end
+
   test "should compile a blog post correctly" do
     post = Post.compile(@path1)
     assert post.title == "First post"
