@@ -2,7 +2,16 @@ defmodule Typewriter.Config do
 
   alias Typewriter.Yaml
 
-  defstruct tags: [], post_template: "templates/post.html.eex", posts_template: "templates/posts.html.eex", posts_dir: "posts", layout_template: "templates/layout.html.eex", ignored_dirs: [], ignored_files: []
+  defstruct tags: [],
+  post_template: "templates/post.html.eex",
+  posts_template: "templates/posts.html.eex",
+  posts_dir: "posts",
+  author_template: "templates/author.html.eex",
+  authors_template: "templates/authors.html.eex",
+  authors_dir: "authors",
+  layout_template: "templates/layout.html.eex",
+  ignored_dirs: [],
+  ignored_files: []
 
   @file_path "config.yaml"
 
@@ -18,10 +27,13 @@ defmodule Typewriter.Config do
       tags: Yaml.get_list(yaml, "tags"),
       ignored_files: Yaml.get_list(yaml, "ignored_files"),
       ignored_dirs: Yaml.get_list(yaml, "ignored_dirs"),
-      posts_template: Yaml.get_prop(yaml, "posts_template"),
-      layout_template: Yaml.get_prop(yaml, "layout_template"),
       post_template: Yaml.get_prop(yaml, "post_template"),
+      posts_template: Yaml.get_prop(yaml, "posts_template"),
       posts_dir: Yaml.get_prop(yaml, "posts_dir"),
+      author_template: Yaml.get_prop(yaml, "author_template"),
+      authors_template: Yaml.get_prop(yaml, "authors_template"),
+      authors_dir: Yaml.get_prop(yaml, "authors_dir"),
+      layout_template: Yaml.get_prop(yaml, "layout_template"),
     }
 
     config
@@ -40,6 +52,10 @@ defmodule Typewriter.Config do
       Map.merge(stored_config, new_config)
     end)
     get
+  end
+
+  def clear do
+    Agent.update(__MODULE__, fn _ -> %Typewriter.Config{} end)
   end
 
 end

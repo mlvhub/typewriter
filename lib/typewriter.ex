@@ -9,6 +9,7 @@ defmodule Typewriter do
     children = [
       worker(Typewriter.Config, []),
       worker(Typewriter.Post, []),
+      worker(Typewriter.Author, []),
     ]
 
     opts = [strategy: :one_for_one, name: Typewriter.Supervisor]

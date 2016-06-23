@@ -29,10 +29,20 @@ defmodule Typewriter.FileSystem do
     |> handle_file(build_path, root_dir, [])
     |> Enum.each(&Task.await/1)
 
+    config = Config.get
+
     posts = Post.ordered_list
-    FileWriter.write_posts_file(build_path, root_dir, posts)
+    FileWriter.write_plural_file(build_path, root_dir, config.posts_template, [posts: posts])
+
+    # Write Author files
+    authors = Typewriter.Author.list
+    FileWriter.write_plural_file(build_path, root_dir, config.authors_template, [authors: authors])
 
     _final_path = Path.join([build_path, Path.basename(root_dir)])
+  end
+
+  def author_file?(config, file) do
+    String.contains?(file, Path.join([config.authors_dir, "/"]))
   end
   
   def handle_file(root_dir, build_full_path, full_path, tasks) do
@@ -48,7 +58,11 @@ defmodule Typewriter.FileSystem do
         |> Enum.flat_map(fn x -> handle_file(root_dir, new_build_full_path, x, tasks) end)
       Path.extname(full_path) == ".md" ->
         # compile the markdown to html
-        task = FileWriter.write_post_files(root_dir, full_path, new_build_full_path)
+        task = FileWriter.write_post_file(root_dir, full_path, new_build_full_path)
+        [task | tasks]
+      # Must go before ignored_extensions check, otherwise author files will be ignored because yaml files are in ignored_extensions
+      author_file?(config, full_path) ->
+        task = FileWriter.write_author_file(root_dir, full_path, new_build_full_path)
         [task | tasks]
       Enum.member?(@ignored_extensions, Path.extname(full_path)) ->
         tasks
