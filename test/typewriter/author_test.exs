@@ -30,6 +30,15 @@ defmodule Typewriter.AuthorTest do
     assert author.profile_picture == "images/picture.png"
   end
 
+  test "should find authors by id correctly" do
+    author = Author.compile(@path1)
+    assert Author.by_id(author.author_id) != nil
+  end
+
+  test "should not find authors by id with invalid ids" do
+    assert Author.by_id("no id") == nil
+  end
+
   test "should not add repeated authors" do
     Author.compile(@path1)
     Author.compile(@path1)

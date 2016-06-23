@@ -27,6 +27,10 @@ defmodule Typewriter.Post do
     |> Enum.count
   end
 
+  def author_info(post) do
+    Typewriter.Author.by_id(post.author_id)
+  end
+
   def recommend(post, amount \\ 5) do
     list
     |> Enum.reject(fn p -> p.slug == post.slug end)

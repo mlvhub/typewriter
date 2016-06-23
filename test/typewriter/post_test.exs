@@ -5,6 +5,7 @@ defmodule Typewriter.PostTest do
   alias Typewriter.Post
 
   @path1 "test/sample_files/first-post.md"
+  @author_path "test/sample_files/authors/miguel-lopez.yaml"
 
   setup do
     Post.start_link
@@ -36,6 +37,22 @@ defmodule Typewriter.PostTest do
     Post.compile(@path1)
 
     assert Post.list |> Enum.count == 1
+  end
+
+  test "should get author info correctly" do
+    post = Post.compile(@path1)
+    Typewriter.Author.start_link
+    Typewriter.Author.compile(@author_path)
+
+    author = Post.author_info(post)
+    assert author.name == "Miguel López Valenciano"
+  end
+
+  test "should not get author info if the author is not loaded or non existent" do
+    post = Post.compile(@path1)
+
+    author = Post.author_info(post)
+    assert author == nil
   end
 
   test "should count the post's word average correctly" do

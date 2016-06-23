@@ -18,6 +18,11 @@ defmodule Typewriter.Author do
     end)
   end
 
+  def by_id(author_id) do
+    list
+    |> Enum.find(fn a -> a.author_id == author_id end)
+  end
+
   def list do
     Agent.get(__MODULE__, &(&1))
   end
