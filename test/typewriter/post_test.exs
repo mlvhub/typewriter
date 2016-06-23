@@ -27,7 +27,7 @@ defmodule Typewriter.PostTest do
     assert post.content != nil
     assert post.sanitized_content != nil
     assert post.creation_date == "2016-04-24"
-    assert post.author == "mlopez"
+    assert post.author_id == "mlopez150693"
     assert post.cover_image == "images/dummy.png"
   end
 

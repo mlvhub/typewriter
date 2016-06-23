@@ -3,7 +3,7 @@ defmodule Typewriter.Post do
   alias Typewriter.Yaml
 
   @derive [Poison.Encoder]
-  defstruct title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author: nil, cover_image: nil, slug: nil
+  defstruct title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author_id: nil, cover_image: nil, slug: nil
 
   @reject_characters ["", " ", "-", ",", "."]
 
@@ -85,7 +85,7 @@ defmodule Typewriter.Post do
       title: Yaml.get_prop(props, "title"),
       creation_date: Yaml.get_prop(props, "creation_date"),
       description: Yaml.get_prop(props, "description"),
-      author: Yaml.get_prop(props, "author"),
+      author_id: Yaml.get_prop(props, "author_id"),
       content: content,
       sanitized_content: content |> String.replace("\n", " ") |> HtmlSanitizeEx.strip_tags,
       cover_image: Yaml.get_prop(props, "cover_image"),
@@ -96,7 +96,7 @@ defmodule Typewriter.Post do
 end
 
 defimpl Poison.Encoder, for: Typewriter.Post do
-  def encode(%Typewriter.Post{title: title, sanitized_content: body, author: author, tags: tags}, options) do
-    Poison.Encoder.Map.encode(%{title: title, body: body, author: author, tags: tags}, options)
+  def encode(%Typewriter.Post{title: title, sanitized_content: body, author_id: author_id, tags: tags}, options) do
+    Poison.Encoder.Map.encode(%{title: title, body: body, author_id: author_id, tags: tags}, options)
   end
 end

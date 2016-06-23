@@ -2,7 +2,13 @@ defmodule Typewriter.Config do
 
   alias Typewriter.Yaml
 
-  defstruct tags: [], post_template: "templates/post.html.eex", posts_template: "templates/posts.html.eex", posts_dir: "posts", layout_template: "templates/layout.html.eex", ignored_dirs: [], ignored_files: []
+  defstruct tags: [],
+  post_template: "templates/post.html.eex",
+  posts_template: "templates/posts.html.eex",
+  posts_dir: "posts",
+  layout_template: "templates/layout.html.eex",
+  ignored_dirs: [],
+  ignored_files: []
 
   @file_path "config.yaml"
 
