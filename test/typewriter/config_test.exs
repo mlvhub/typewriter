@@ -18,7 +18,10 @@ defmodule Typewriter.ConfigTest do
     assert config.tags == ["swift", "tdd", "ios", "elixir", "phoenix"]
     assert config.post_template == "templates/post.html.eex"
     assert config.posts_template == "templates/posts.html.eex"
+    assert config.author_template == "templates/author.html.eex"
+    assert config.authors_template == "templates/authors.html.eex"
     assert config.posts_dir == "posts"
+    assert config.authors_dir == "authors"
     assert config.ignored_dirs == [".git"]
     assert config.ignored_files == ["README.md"]
     assert config.layout_template == "templates/layout.html.eex"
@@ -30,7 +33,10 @@ defmodule Typewriter.ConfigTest do
     assert config.tags == ["swift", "tdd", "ios", "elixir", "phoenix"]
     assert config.post_template == "templates/post.html.eex"
     assert config.posts_template == "templates/posts.html.eex"
+    assert config.author_template == "templates/author.html.eex"
+    assert config.authors_template == "templates/authors.html.eex"
     assert config.posts_dir == "new_posts_dir"
+    assert config.authors_dir == "authors"
     assert config.ignored_dirs == [".git"]
     assert config.ignored_files == ["README.md"]
     assert config.layout_template == "templates/layout.html.eex"
@@ -42,7 +48,10 @@ defmodule Typewriter.ConfigTest do
     assert config.posts_template == "index.html.eex"
     assert config.tags == []
     assert config.post_template == "templates/post.html.eex"
+    assert config.author_template == "templates/author.html.eex"
+    assert config.authors_template == "templates/authors.html.eex"
     assert config.posts_dir == "posts"
+    assert config.authors_dir == "authors"
     assert config.ignored_dirs == []
     assert config.ignored_files == []
     assert config.layout_template == "templates/layout.html.eex"

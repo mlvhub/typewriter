@@ -31,6 +31,7 @@ defmodule Typewriter.FileSystem do
 
     posts = Post.ordered_list
     FileWriter.write_posts_file(build_path, root_dir, posts)
+    # Write Author files
 
     _final_path = Path.join([build_path, Path.basename(root_dir)])
   end

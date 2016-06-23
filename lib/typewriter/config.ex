@@ -6,6 +6,9 @@ defmodule Typewriter.Config do
   post_template: "templates/post.html.eex",
   posts_template: "templates/posts.html.eex",
   posts_dir: "posts",
+  author_template: "templates/author.html.eex",
+  authors_template: "templates/authors.html.eex",
+  authors_dir: "authors",
   layout_template: "templates/layout.html.eex",
   ignored_dirs: [],
   ignored_files: []
