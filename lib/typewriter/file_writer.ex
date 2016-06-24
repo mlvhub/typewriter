@@ -4,7 +4,8 @@ defmodule Typewriter.FileWriter do
     config = Typewriter.Config.get
     contents = EEx.eval_file(Path.join([root_dir, template_file]), assigns: assigns)
     new_path = Path.join([build_path, Path.basename(root_dir), Path.basename(template_file, Path.extname(template_file))])
-    File.write!(new_path, contents)
+    layout_content = EEx.eval_file(Path.join([root_dir, config.layout_template]), assigns: [content: contents])
+    File.write!(new_path, layout_content)
   end
 
   def write_author_file(root_dir, full_path, new_build_full_path) do
