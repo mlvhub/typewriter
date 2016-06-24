@@ -3,7 +3,7 @@ defmodule Typewriter.Post do
   alias Typewriter.Yaml
 
   @derive [Poison.Encoder]
-  defstruct title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author_id: nil, cover_image: nil, slug: nil
+  defstruct title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author: nil, cover_image: nil, slug: nil
 
   @reject_characters ["", " ", "-", ",", "."]
 
@@ -25,10 +25,6 @@ defmodule Typewriter.Post do
     |> String.split
     |> Enum.reject(fn str -> Enum.member?(@reject_characters, str) end)
     |> Enum.count
-  end
-
-  def author_info(post) do
-    Typewriter.Author.by_id(post.author_id)
   end
 
   def recommend(post, amount \\ 5) do
@@ -67,7 +63,7 @@ defmodule Typewriter.Post do
 
   # Markdown handling
 
-  def compile(file_path) do
+  def compile(file_path, root_dir) do
     post = %Typewriter.Post{
       slug: Path.basename(file_path, Path.extname(file_path))
     }
@@ -75,7 +71,7 @@ defmodule Typewriter.Post do
     file_path
     |> File.read!
     |> split
-    |> extract(post)
+    |> extract(post, root_dir)
     |> add
   end
 
@@ -84,12 +80,15 @@ defmodule Typewriter.Post do
     {Yaml.parse(frontmatter), Earmark.to_html(markdown)}
   end
 
-  defp extract({props, content}, post) do
+  defp extract({props, content}, post, root_dir) do
+    author_filename = Yaml.get_prop(props, "author_filename")
+    author_path = Path.join([root_dir, author_filename])
+    author = if (author_filename != nil), do: Typewriter.Author.compile(author_path), else: nil
     %{post |
       title: Yaml.get_prop(props, "title"),
       creation_date: Yaml.get_prop(props, "creation_date"),
       description: Yaml.get_prop(props, "description"),
-      author_id: Yaml.get_prop(props, "author_id"),
+      author: author,
       content: content,
       sanitized_content: content |> String.replace("\n", " ") |> HtmlSanitizeEx.strip_tags,
       cover_image: Yaml.get_prop(props, "cover_image"),
@@ -100,7 +99,7 @@ defmodule Typewriter.Post do
 end
 
 defimpl Poison.Encoder, for: Typewriter.Post do
-  def encode(%Typewriter.Post{title: title, sanitized_content: body, author_id: author_id, tags: tags}, options) do
-    Poison.Encoder.Map.encode(%{title: title, body: body, author_id: author_id, tags: tags}, options)
+  def encode(%Typewriter.Post{title: title, sanitized_content: body, author: author, tags: tags}, options) do
+    Poison.Encoder.Map.encode(%{title: title, body: body, author: author, tags: tags}, options)
   end
 end

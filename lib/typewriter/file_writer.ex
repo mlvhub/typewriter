@@ -28,7 +28,7 @@ defmodule Typewriter.FileWriter do
   def write_post_file(root_dir, full_path, new_build_full_path) do
     config = Typewriter.Config.get
     Task.async(fn ->
-      post = Typewriter.Post.compile(full_path)
+      post = Typewriter.Post.compile(full_path, root_dir)
 
       post_content = EEx.eval_file(Path.join([root_dir, config.post_template]), assigns: [post: post, recommended_posts: Typewriter.Post.recommend(post)])
 

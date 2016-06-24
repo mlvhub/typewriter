@@ -3,7 +3,7 @@ defmodule Typewriter.Author do
   alias Typewriter.Yaml
 
   @derive [Poison.Encoder]
-  defstruct author_id: nil, name: nil, bio: nil, linked_in: nil, twitter: nil, github: nil, profile_picture: nil, slug: nil
+  defstruct author_id: nil, name: nil, bio: nil, linked_in: nil, twitter: nil, github: nil, profile_picture: nil, slug: nil, filepath: nil
 
   # Agent API
 
@@ -23,6 +23,11 @@ defmodule Typewriter.Author do
     |> Enum.find(fn a -> a.author_id == author_id end)
   end
 
+  def by_filepath(filepath) do
+    list
+    |> Enum.find(fn a -> Path.expand(a.filepath) == Path.expand(filepath) end)
+  end
+
   def list do
     Agent.get(__MODULE__, &(&1))
   end
@@ -33,15 +38,21 @@ defmodule Typewriter.Author do
 
   # Markdown handling
 
-  def compile(file_path) do
-    author = %Typewriter.Author{
-      slug: Path.basename(file_path, Path.extname(file_path))
-    }
+  def compile(filepath) do
+    post = by_filepath(filepath)
+    if (post) do
+      post
+    else
+      author = %Typewriter.Author{
+        slug: Path.basename(filepath, Path.extname(filepath)),
+        filepath: filepath,
+      }
 
-    file_path
-    |> Yaml.compile
-    |> extract(author)
-    |> add
+      filepath
+      |> Yaml.compile
+      |> extract(author)
+      |> add
+    end
   end
 
   defp extract(props, author) do
