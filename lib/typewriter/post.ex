@@ -82,7 +82,7 @@ defmodule Typewriter.Post do
 
   defp extract({props, content}, post, root_dir) do
     author_filename = Yaml.get_prop(props, "author_filename")
-    author_path = Path.join([root_dir, author_filename])
+    author_path = if (author_filename != nil), do: Path.join([root_dir, author_filename]), else: nil
     author = if (author_filename != nil), do: Typewriter.Author.compile(author_path), else: nil
     %{post |
       title: Yaml.get_prop(props, "title"),

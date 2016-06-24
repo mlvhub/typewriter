@@ -5,5 +5,6 @@ posts_template: templates/posts.html.eex
 author_template: templates/author.html.eex
 authors_template: about.html.eex
 layout_template: templates/layout.html.eex
+evaluate_with_layout: contact.html, about.html
 ignored_dirs: .git
 ignored_files: README.md

@@ -10,6 +10,7 @@ defmodule Typewriter.Config do
   authors_template: "templates/authors.html.eex",
   authors_dir: "authors",
   layout_template: "templates/layout.html.eex",
+  evaluate_with_layout: [],
   ignored_dirs: [],
   ignored_files: []
 
@@ -25,6 +26,7 @@ defmodule Typewriter.Config do
     yaml = Yaml.compile(Path.join([root_dir, @file_path]))
     config = %Typewriter.Config{
       tags: Yaml.get_list(yaml, "tags"),
+      evaluate_with_layout: Yaml.get_list(yaml, "evaluate_with_layout"),
       ignored_files: Yaml.get_list(yaml, "ignored_files"),
       ignored_dirs: Yaml.get_list(yaml, "ignored_dirs"),
       post_template: Yaml.get_prop(yaml, "post_template"),

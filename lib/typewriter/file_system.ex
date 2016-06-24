@@ -64,6 +64,11 @@ defmodule Typewriter.FileSystem do
       author_file?(config, full_path) ->
         task = FileWriter.write_author_file(root_dir, full_path, new_build_full_path)
         [task | tasks]
+      Enum.member?(config.evaluate_with_layout, Path.basename(full_path)) ->
+        task = Task.async(fn ->
+          FileWriter.write_layout(root_dir, new_build_full_path, File.read!(full_path))
+        end)
+        [task | tasks]
       Enum.member?(@ignored_extensions, Path.extname(full_path)) ->
         tasks
       Enum.member?(config.ignored_files, Path.basename(full_path)) ->

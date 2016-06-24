@@ -1,9 +1,15 @@
 defmodule Typewriter.FileWriter do
 
-  def write_plural_file(build_path, root_dir, template_file, assigns) do
+  def write_plural_file(build_path, root_dir, template_file, assigns \\ []) do
     config = Typewriter.Config.get
     contents = EEx.eval_file(Path.join([root_dir, template_file]), assigns: assigns)
     new_path = Path.join([build_path, Path.basename(root_dir), Path.basename(template_file, Path.extname(template_file))])
+    write_layout(root_dir, new_path, contents)
+  end
+
+  def write_layout(root_dir, new_path, contents) do
+    if (String.contains?(new_path, "contact.html")), do: IO.puts "CONTACT: #{new_path}"
+    config = Typewriter.Config.get
     layout_content = EEx.eval_file(Path.join([root_dir, config.layout_template]), assigns: [content: contents])
     File.write!(new_path, layout_content)
   end
@@ -15,12 +21,9 @@ defmodule Typewriter.FileWriter do
 
       author_content = EEx.eval_file(Path.join([root_dir, config.author_template]), assigns: [author: author])
 
-      # Evaluate the layout template, by giving it the evaluated author template
-      layout_content = EEx.eval_file(Path.join([root_dir, config.layout_template]), assigns: [content: author_content])
-
       new_html_path = new_singular_path(new_build_full_path, ".html")
 
-      File.write!(new_html_path, layout_content)
+      write_layout(root_dir, new_html_path, author_content)
 
       author
     end)
