@@ -42,7 +42,7 @@ defmodule Typewriter.FileSystem do
   end
 
   def author_file?(config, file) do
-    String.contains?(file, Path.join([config.authors_dir, "/"]))
+    String.contains?(file, Path.join([config.authors_dir, "/"])) && Path.extname(file) == ".yaml"
   end
   
   def handle_file(root_dir, build_full_path, full_path, tasks) do

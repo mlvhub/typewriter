@@ -8,13 +8,13 @@ defmodule Typewriter.FileWriter do
   end
 
   def write_layout(root_dir, new_path, contents) do
-    if (String.contains?(new_path, "contact.html")), do: IO.puts "CONTACT: #{new_path}"
     config = Typewriter.Config.get
     layout_content = EEx.eval_file(Path.join([root_dir, config.layout_template]), assigns: [content: contents])
     File.write!(new_path, layout_content)
   end
 
   def write_author_file(root_dir, full_path, new_build_full_path) do
+    IO.puts "P: #{full_path}"
     config = Typewriter.Config.get
     Task.async(fn ->
       author = Typewriter.Author.compile(full_path)
