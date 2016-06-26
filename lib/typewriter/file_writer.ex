@@ -1,13 +1,15 @@
 defmodule Typewriter.FileWriter do
 
   def write_paginated_file(build_path, root_dir, template_file, posts) do
-    config = Typewriter.Config.get
-    posts
-    |> create_paginated_posts(config)
-    |> Enum.map(fn {paginated_posts, current_index, max_index} ->
-      contents = EEx.eval_file(Path.join([root_dir, template_file]), assigns: [posts: paginated_posts, current_index: current_index, max_index: max_index])
-      new_path = new_paginated_path(build_path, root_dir, template_file, current_index)
-      write_layout(root_dir, new_path, contents)
+    Task.async(fn ->
+      config = Typewriter.Config.get
+      posts
+      |> create_paginated_posts(config)
+      |> Enum.map(fn {paginated_posts, current_index, max_index} ->
+        contents = EEx.eval_file(Path.join([root_dir, template_file]), assigns: [posts: paginated_posts, current_index: current_index, max_index: max_index])
+        new_path = new_paginated_path(build_path, root_dir, template_file, current_index)
+        write_layout(root_dir, new_path, contents)
+      end)
     end)
   end
 
@@ -28,10 +30,12 @@ defmodule Typewriter.FileWriter do
   end
 
   def write_plural_file(build_path, root_dir, template_file, assigns \\ []) do
-    config = Typewriter.Config.get
-    contents = EEx.eval_file(Path.join([root_dir, template_file]), assigns: assigns)
-    new_path = Path.join([build_path, Path.basename(root_dir), Path.basename(template_file, Path.extname(template_file))])
-    write_layout(root_dir, new_path, contents)
+    Task.async(fn ->
+      config = Typewriter.Config.get
+      contents = EEx.eval_file(Path.join([root_dir, template_file]), assigns: assigns)
+      new_path = Path.join([build_path, Path.basename(root_dir), Path.basename(template_file, Path.extname(template_file))])
+      write_layout(root_dir, new_path, contents)
+    end)
   end
 
   def write_layout(root_dir, new_path, contents) do
@@ -41,7 +45,6 @@ defmodule Typewriter.FileWriter do
   end
 
   def write_author_file(root_dir, full_path, new_build_full_path) do
-    IO.puts "P: #{full_path}"
     config = Typewriter.Config.get
     Task.async(fn ->
       author = Typewriter.Author.compile(full_path)

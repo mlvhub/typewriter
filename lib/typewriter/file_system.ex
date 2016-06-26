@@ -34,12 +34,22 @@ defmodule Typewriter.FileSystem do
     config = Config.get
 
     posts = Post.ordered_list
-    config.posts_templates
-    |> Enum.each(fn template -> FileWriter.write_paginated_file(build_path, root_dir, template, posts) end)
-
-    # Write Author files
     authors = Author.list
-    FileWriter.write_plural_file(build_path, root_dir, config.authors_template, [authors: authors])
+
+    # Non Paginated Post Templates
+    posts_tasks = config.posts_templates
+    |> Enum.reject(fn template -> Enum.member?(config.paginated_templates, template) end)
+    |> Enum.map(fn template -> FileWriter.write_plural_file(build_path, root_dir, template, [posts: posts]) end)
+
+    # Paginated Post Templates
+    paginated_tasks = config.paginated_templates
+    |> Enum.map(fn template -> FileWriter.write_paginated_file(build_path, root_dir, template, posts) end)
+
+    # Author Templates
+    author_task = FileWriter.write_plural_file(build_path, root_dir, config.authors_template, [authors: authors])
+
+    [author_task | Enum.concat([posts_tasks, paginated_tasks])]
+    |> Enum.each(&Task.await/1)
 
     _final_path = Path.join([build_path, Path.basename(root_dir)])
   end
