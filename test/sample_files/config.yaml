@@ -1,10 +1,12 @@
 tags: swift, tdd, ios, elixir, phoenix
 posts_dir: posts
 post_template: templates/post.html.eex
-posts_template: templates/posts.html.eex
+posts_templates: templates/posts.html.eex, index.html.eex
+paginated_templates: templates/posts.html.eex, index.html.eex
 author_template: templates/author.html.eex
 authors_template: about.html.eex
 layout_template: templates/layout.html.eex
 evaluate_with_layout: contact.html, about.html
 ignored_dirs: .git
 ignored_files: README.md
+paginate: 12

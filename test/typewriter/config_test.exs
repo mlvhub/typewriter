@@ -17,10 +17,12 @@ defmodule Typewriter.ConfigTest do
     config = Config.get
     assert config.tags == ["swift", "tdd", "ios", "elixir", "phoenix"]
     assert config.post_template == "templates/post.html.eex"
-    assert config.posts_template == "templates/posts.html.eex"
+    assert config.posts_templates == ["templates/posts.html.eex", "index.html.eex"]
+    assert config.paginated_templates == ["templates/posts.html.eex", "index.html.eex"]
     assert config.author_template == "templates/author.html.eex"
     assert config.authors_template == "about.html.eex"
     assert config.posts_dir == "posts"
+    assert config.paginate == 12
     assert config.authors_dir == "authors"
     assert config.ignored_dirs == [".git"]
     assert config.evaluate_with_layout == ["contact.html", "about.html"]
@@ -33,10 +35,12 @@ defmodule Typewriter.ConfigTest do
     config = Config.update(new_value)
     assert config.tags == ["swift", "tdd", "ios", "elixir", "phoenix"]
     assert config.post_template == "templates/post.html.eex"
-    assert config.posts_template == "templates/posts.html.eex"
+    assert config.posts_templates == ["templates/posts.html.eex", "index.html.eex"]
+    assert config.paginated_templates == ["templates/posts.html.eex", "index.html.eex"]
     assert config.author_template == "templates/author.html.eex"
     assert config.evaluate_with_layout == ["contact.html", "about.html"]
     assert config.authors_template == "about.html.eex"
+    assert config.paginate == 12
     assert config.posts_dir == "new_posts_dir"
     assert config.authors_dir == "authors"
     assert config.ignored_dirs == [".git"]
@@ -50,11 +54,13 @@ defmodule Typewriter.ConfigTest do
 
     assert config.tags == []
     assert config.post_template == "templates/post.html.eex"
-    assert config.posts_template == "index.html.eex"
+    assert config.posts_templates == ["index.html.eex"]
+    assert config.paginated_templates == ["templates/posts.html.eex"]
     assert config.posts_dir == "posts"
     assert config.author_template == "templates/author.html.eex"
     assert config.authors_template == "templates/authors.html.eex"
     assert config.authors_dir == "authors"
+    assert config.paginate == 9
     assert config.ignored_dirs == []
     assert config.ignored_files == []
     assert config.layout_template == "templates/layout.html.eex"
