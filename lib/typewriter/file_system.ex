@@ -3,6 +3,7 @@ defmodule Typewriter.FileSystem do
   alias Typewriter.Post
   alias Typewriter.Config
   alias Typewriter.FileWriter
+  alias Typewriter.Author
 
   @build_dir "typewriter_build"
   @ignored_dirs [@build_dir, "templates"]
@@ -19,6 +20,7 @@ defmodule Typewriter.FileSystem do
     build_path = Path.join([root_dir, @build_dir])
     clean_build_dir(build_path)
     Post.clear
+    Author.clear
 
     build_path
   end
@@ -33,10 +35,10 @@ defmodule Typewriter.FileSystem do
 
     posts = Post.ordered_list
     config.posts_templates
-    |> Enum.each(fn template -> FileWriter.write_plural_file(build_path, root_dir, template, [posts: posts]) end)
+    |> Enum.each(fn template -> FileWriter.write_paginated_file(build_path, root_dir, template, posts) end)
 
     # Write Author files
-    authors = Typewriter.Author.list
+    authors = Author.list
     FileWriter.write_plural_file(build_path, root_dir, config.authors_template, [authors: authors])
 
     _final_path = Path.join([build_path, Path.basename(root_dir)])
@@ -45,7 +47,7 @@ defmodule Typewriter.FileSystem do
   def author_file?(config, file) do
     String.contains?(file, Path.join([config.authors_dir, "/"])) && Path.extname(file) == ".yaml"
   end
-  
+
   def handle_file(root_dir, build_full_path, full_path, tasks) do
     new_build_full_path = Path.join([build_full_path, Path.basename(full_path)])
     config = Config.get

@@ -6,6 +6,8 @@ defmodule Typewriter.Config do
   post_template: "templates/post.html.eex",
   posts_templates: ["templates/posts.html.eex"],
   posts_dir: "posts",
+  paginate: 9,
+  paginated_templates: ["templates/posts.html.eex"],
   author_template: "templates/author.html.eex",
   authors_template: "templates/authors.html.eex",
   authors_dir: "authors",
@@ -31,7 +33,9 @@ defmodule Typewriter.Config do
       ignored_dirs: Yaml.get_list(yaml, "ignored_dirs"),
       post_template: Yaml.get_prop(yaml, "post_template"),
       posts_templates: Yaml.get_list(yaml, "posts_templates"),
+      paginated_templates: Yaml.get_list(yaml, "paginated_templates"),
       posts_dir: Yaml.get_prop(yaml, "posts_dir"),
+      paginate: to_integer(Yaml.get_prop(yaml, "paginate")),
       author_template: Yaml.get_prop(yaml, "author_template"),
       authors_template: Yaml.get_prop(yaml, "authors_template"),
       authors_dir: Yaml.get_prop(yaml, "authors_dir"),
@@ -40,9 +44,18 @@ defmodule Typewriter.Config do
 
     config
     |> Map.from_struct
-    |> Enum.reject(fn {_, v} -> v == nil end)
+    |> Enum.reject(fn {_, v} -> v == nil || v == [] end)
     |> Enum.into(%{})
     |> update
+  end
+
+  def to_integer(value) do
+    case value do
+      nil -> value
+      _ ->
+        {int, _} = Integer.parse value
+        int
+    end
   end
 
   def get do
