@@ -4,7 +4,7 @@ defmodule Typewriter.Config do
 
   defstruct tags: [],
   post_template: "templates/post.html.eex",
-  posts_template: "templates/posts.html.eex",
+  posts_templates: ["templates/posts.html.eex"],
   posts_dir: "posts",
   author_template: "templates/author.html.eex",
   authors_template: "templates/authors.html.eex",
@@ -30,7 +30,7 @@ defmodule Typewriter.Config do
       ignored_files: Yaml.get_list(yaml, "ignored_files"),
       ignored_dirs: Yaml.get_list(yaml, "ignored_dirs"),
       post_template: Yaml.get_prop(yaml, "post_template"),
-      posts_template: Yaml.get_prop(yaml, "posts_template"),
+      posts_templates: Yaml.get_list(yaml, "posts_templates"),
       posts_dir: Yaml.get_prop(yaml, "posts_dir"),
       author_template: Yaml.get_prop(yaml, "author_template"),
       authors_template: Yaml.get_prop(yaml, "authors_template"),

@@ -1,1 +1,1 @@
-posts_template: "index.html.eex"
+posts_templates: ["index.html.eex"]

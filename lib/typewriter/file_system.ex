@@ -32,7 +32,8 @@ defmodule Typewriter.FileSystem do
     config = Config.get
 
     posts = Post.ordered_list
-    FileWriter.write_plural_file(build_path, root_dir, config.posts_template, [posts: posts])
+    config.posts_templates
+    |> Enum.each(fn template -> FileWriter.write_plural_file(build_path, root_dir, template, [posts: posts]) end)
 
     # Write Author files
     authors = Typewriter.Author.list
