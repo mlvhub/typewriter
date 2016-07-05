@@ -7,8 +7,9 @@ defmodule Typewriter.FileWriter do
       |> create_paginated_posts(config)
       |> Enum.map(fn {paginated_posts, current_index, max_index} ->
         contents = EEx.eval_file(Path.join([root_dir, template_file]), assigns: [posts: paginated_posts, current_index: current_index, max_index: max_index])
-        new_path = new_paginated_path(build_path, root_dir, template_file, current_index)
-        write_layout(root_dir, new_path, contents)
+        {new_dir_path, new_file_path} = new_paginated_path(build_path, root_dir, template_file, current_index)
+        File.mkdir(new_dir_path)
+        write_layout(root_dir, new_file_path, contents)
       end)
     end)
   end
@@ -26,7 +27,9 @@ defmodule Typewriter.FileWriter do
     # Template without extension
     no_extension = Path.basename(html_file, Path.extname(html_file))
     # Construct new paginated name
-    Path.join([build_path, Path.basename(root_dir), no_extension <> "-#{index}" <> Path.extname(html_file)])
+    new_dir_path = Path.join([build_path, Path.basename(root_dir), no_extension, "#{index}"])
+    new_file_path = Path.join([new_dir_path, "index" <> Path.extname(html_file)])
+    {new_dir_path, new_file_path}
   end
 
   def write_plural_file(build_path, root_dir, template_file, assigns \\ []) do
@@ -51,8 +54,9 @@ defmodule Typewriter.FileWriter do
 
       author_content = EEx.eval_file(Path.join([root_dir, config.author_template]), assigns: [author: author])
 
-      new_html_path = new_singular_path(new_build_full_path, ".html")
+      {new_dir_path, new_html_path} = new_singular_path(new_build_full_path, ".html")
 
+      File.mkdir(new_dir_path)
       write_layout(root_dir, new_html_path, author_content)
 
       author
@@ -71,18 +75,17 @@ defmodule Typewriter.FileWriter do
 
       json_content = Poison.encode!(post)
 
-      new_html_path = new_singular_path(new_build_full_path, ".html")
-      new_json_path = new_singular_path(new_build_full_path, ".json")
+      {new_dir_path, new_html_path} = new_singular_path(new_build_full_path, ".html")
 
+      File.mkdir(new_dir_path)
       File.write!(new_html_path, layout_content)
-      File.write!(new_json_path, json_content)
 
       post
     end)
   end
 
   def copy_dir_and_get_valid_children(full_path, new_build_full_path, ignored_dirs) do
-    File.mkdir!(new_build_full_path)
+    File.mkdir(new_build_full_path)
     # prepare dir children and their paths
     full_path
     |> File.ls!
@@ -97,6 +100,8 @@ defmodule Typewriter.FileWriter do
   end
 
   defp new_singular_path(new_build_full_path, ext) do
-    Path.join(Path.dirname(new_build_full_path), Path.basename(new_build_full_path, Path.extname(new_build_full_path)) <> ext)
+    new_dir_path = Path.join(Path.dirname(new_build_full_path), Path.basename(new_build_full_path, Path.extname(new_build_full_path)))
+    new_file_path = Path.join([new_dir_path, "index" <> ext])
+    {new_dir_path, new_file_path}
   end
 end

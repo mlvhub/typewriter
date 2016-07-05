@@ -5,7 +5,7 @@ defmodule Typewriter.Server do
     
     routes = [
       {"/", :cowboy_static, {:file, Path.join([root_dir, "index.html"])}},
-      {"/[...]", :cowboy_static, {:dir, root_dir}}
+      {"/[...]", :cowboy_static, {:dir, root_dir}},
     ]
 
     dispatch = :cowboy_router.compile([{:_, routes}])

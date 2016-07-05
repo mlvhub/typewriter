@@ -17,7 +17,8 @@ defmodule Typewriter.FileWriterTest do
   description: "The first post is about one topic.",
   sanitized_content: "This post is written in Markdown.A header2 is goodLists are nice, too:Apples\nBananas\nPears\nHome",
   tags: ["swift", "ios", "tdd"], title: "First post"}]
-  @path1 "sample_project/posts/first-post.md"
+  @post_path "sample_project/posts/first-post.md"
+  @compiled_path "sample_project/posts/first-post/index.html"
 
   setup do
     Typewriter.Config.init(@root)
@@ -39,12 +40,10 @@ defmodule Typewriter.FileWriterTest do
   end
 
   test "should write all post files correctly" do
-    task = FileWriter.write_post_file(@root, @path1, @path1)
+    task = FileWriter.write_post_file(@root, @post_path, @post_path)
     Task.await(task)
-    assert File.exists?(String.replace(@path1, ".md", ".html"))
-    assert File.exists?(String.replace(@path1, ".md", ".json"))
+    assert File.exists?(@compiled_path)
     # Delete the created files
-    File.rm_rf!(String.replace(@path1, ".md", ".html"))
-    File.rm_rf!(String.replace(@path1, ".md", ".json"))
+    File.rm_rf!(@compiled_path)
   end
 end
