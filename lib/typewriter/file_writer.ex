@@ -1,12 +1,14 @@
 defmodule Typewriter.FileWriter do
 
+  alias Typewriter.Template
+
   def write_paginated_file(build_path, root_dir, template_file, posts) do
     Task.async(fn ->
       config = Typewriter.Config.get
       posts
       |> create_paginated_posts(config)
       |> Enum.map(fn {paginated_posts, current_index, max_index} ->
-        contents = EEx.eval_file(Path.join([root_dir, template_file]), assigns: [posts: paginated_posts, current_index: current_index, max_index: max_index])
+        contents = Template.eval(Path.join([root_dir, template_file]), assigns: [posts: paginated_posts, current_index: current_index, max_index: max_index])
         {new_dir_path, new_file_path} = new_paginated_path(build_path, root_dir, template_file, current_index)
         File.mkdir(new_dir_path)
         write_layout(root_dir, new_file_path, contents)
@@ -35,7 +37,7 @@ defmodule Typewriter.FileWriter do
   def write_plural_file(build_path, root_dir, template_file, assigns \\ []) do
     Task.async(fn ->
       config = Typewriter.Config.get
-      contents = EEx.eval_file(Path.join([root_dir, template_file]), assigns: assigns)
+      contents = Template.eval(Path.join([root_dir, template_file]), assigns: assigns)
       new_path = Path.join([build_path, Path.basename(root_dir), Path.basename(template_file, Path.extname(template_file))])
       write_layout(root_dir, new_path, contents)
     end)
@@ -43,7 +45,7 @@ defmodule Typewriter.FileWriter do
 
   def write_layout(root_dir, new_path, contents) do
     config = Typewriter.Config.get
-    layout_content = EEx.eval_file(Path.join([root_dir, config.layout_template]), assigns: [content: contents])
+    layout_content = Template.eval(Path.join([root_dir, config.layout_template]), assigns: [content: contents])
     File.write!(new_path, layout_content)
   end
 
@@ -52,7 +54,7 @@ defmodule Typewriter.FileWriter do
     Task.async(fn ->
       author = Typewriter.Author.compile(full_path)
 
-      author_content = EEx.eval_file(Path.join([root_dir, config.author_template]), assigns: [author: author])
+      author_content = Template.eval(Path.join([root_dir, config.author_template]), assigns: [author: author])
 
       {new_dir_path, new_html_path} = new_singular_path(new_build_full_path, ".html")
 
@@ -68,10 +70,10 @@ defmodule Typewriter.FileWriter do
     Task.async(fn ->
       post = Typewriter.Post.compile(full_path, root_dir)
 
-      post_content = EEx.eval_file(Path.join([root_dir, config.post_template]), assigns: [post: post, recommended_posts: Typewriter.Post.recommend(post)])
+      post_content = Template.eval(Path.join([root_dir, config.post_template]), assigns: [post: post, recommended_posts: Typewriter.Post.recommend(post)])
 
       # Evaluate the layout template, by giving it the evaluated post template
-      layout_content = EEx.eval_file(Path.join([root_dir, config.layout_template]), assigns: [content: post_content])
+      layout_content = Template.eval(Path.join([root_dir, config.layout_template]), assigns: [content: post_content])
 
       json_content = Poison.encode!(post)
 
