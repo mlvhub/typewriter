@@ -50,6 +50,13 @@ defmodule Typewriter.FileWriter do
     end)
   end
 
+  def evaluate_with_layout(root_dir, new_build_full_path, contents) do
+      {new_dir_path, new_html_path} = new_singular_path(new_build_full_path, ".html")
+
+      File.mkdir(new_dir_path)
+      write_layout(root_dir, new_html_path, contents)
+  end
+
   def write_layout(root_dir, new_path, contents) do
     config = Typewriter.Config.get
     layout_content = Template.eval(Path.join([root_dir, config.layout_template]), assigns: [content: contents])
@@ -104,7 +111,13 @@ defmodule Typewriter.FileWriter do
 
   def copy_file(full_path, new_build_full_path) do
     Task.async(fn ->
-      File.copy!(full_path, new_build_full_path)
+      if (Path.extname(full_path) == ".html") do
+        {new_dir, new_file} = new_singular_path(new_build_full_path, ".html")
+        File.mkdir(new_dir)
+        File.copy!(full_path, new_file)
+      else
+        File.copy!(full_path, new_build_full_path)
+      end
     end)
   end
 
