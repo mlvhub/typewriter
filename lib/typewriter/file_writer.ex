@@ -38,8 +38,15 @@ defmodule Typewriter.FileWriter do
     Task.async(fn ->
       config = Typewriter.Config.get
       contents = Template.eval(Path.join([root_dir, template_file]), assigns: assigns)
-      new_path = Path.join([build_path, Path.basename(root_dir), Path.basename(template_file, Path.extname(template_file))])
-      write_layout(root_dir, new_path, contents)
+      if (String.contains?(template_file, "index")) do
+        new_path = Path.join([build_path, Path.basename(root_dir), Path.basename(template_file, Path.extname(template_file))])
+        write_layout(root_dir, new_path, contents)
+      else
+        new_dir = Path.join([build_path, Path.basename(root_dir), Template.file_name(template_file)])
+        new_path = Path.join([new_dir, "index.html"])
+        File.mkdir(new_dir)
+        write_layout(root_dir, new_path, contents)
+      end
     end)
   end
 
