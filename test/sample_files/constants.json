@@ -1,0 +1,4 @@
+{
+  "home_path": "/",
+  "posts_path": "/posts/<%= index %>/"
+}

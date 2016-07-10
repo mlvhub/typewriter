@@ -10,6 +10,7 @@ defmodule Typewriter do
       worker(Typewriter.Config, []),
       worker(Typewriter.Post, []),
       worker(Typewriter.Author, []),
+      worker(Typewriter.Constants, []),
     ]
 
     opts = [strategy: :one_for_one, name: Typewriter.Supervisor]
@@ -24,6 +25,7 @@ defmodule Typewriter do
   def generate(root_dir) do
     Supervisor.start_child(Typewriter.Supervisor, [])
     Typewriter.Config.init(root_dir)
+    Typewriter.Constants.init(root_dir)
     Typewriter.FileSystem.generate(root_dir)
   end
 

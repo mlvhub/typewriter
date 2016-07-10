@@ -51,8 +51,10 @@ defmodule Typewriter.AuthorTest do
   end
 
   test "should not find an author by its filepath if it doesn't exist" do
+    Author.clear
     assert Author.by_filepath(@path1) == nil
   end
+
   test "should not add repeated authors" do
     Author.compile(@path1)
     Author.compile(@path1)
