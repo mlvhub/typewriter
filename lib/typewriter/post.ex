@@ -3,7 +3,7 @@ defmodule Typewriter.Post do
   alias Typewriter.Yaml
 
   @derive [Poison.Encoder]
-  defstruct title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author: nil, cover_image: nil, slug: nil
+  defstruct title: nil, creation_date: nil, description: nil, content: nil, tags: [], sanitized_content: nil, author: nil, cover_image: nil, slug: nil, ignore: true
 
   @reject_characters ["", " ", "-", ",", "."]
 
@@ -14,10 +14,12 @@ defmodule Typewriter.Post do
   end
 
   def add(post) do
-    Agent.get_and_update(__MODULE__, fn posts ->
-      filtered_posts = posts |> Enum.filter(fn p -> p.title != post.title end)
-      {post, [post | filtered_posts]}
-    end)
+    unless (post.ignore) do
+      Agent.get_and_update(__MODULE__, fn posts ->
+        filtered_posts = posts |> Enum.filter(fn p -> p.title != post.title end)
+        {post, [post | filtered_posts]}
+      end)
+    end
   end
 
   def word_count(post) do
@@ -92,6 +94,7 @@ defmodule Typewriter.Post do
       content: content,
       sanitized_content: content |> String.replace("\n", " ") |> HtmlSanitizeEx.strip_tags,
       cover_image: Yaml.get_prop(props, "cover_image"),
+      ignore: Poison.decode!(Yaml.get_prop(props, "ignore", "true")),
       tags: Yaml.get_list(props, "tags"),
     }
   end

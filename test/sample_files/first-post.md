@@ -6,6 +6,7 @@ tags: swift, ios,tdd
 layout: test/layout
 author_filename: authors/miguel-lopez.yaml
 cover_image: images/dummy.png
+ignore: false
 ---
 
 This post is written in **Markdown**.

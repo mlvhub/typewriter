@@ -29,6 +29,7 @@ defmodule Typewriter.PostTest do
     assert post.creation_date == "2016-04-24"
     assert post.author.author_id == "mlopez150693"
     assert post.cover_image == "images/dummy.png"
+    assert post.ignore == false
   end
 
   test "should not add repeated posts" do

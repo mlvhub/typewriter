@@ -84,17 +84,19 @@ defmodule Typewriter.FileWriter do
     Task.async(fn ->
       post = Typewriter.Post.compile(full_path, root_dir)
 
-      post_content = Template.eval(Path.join([root_dir, config.post_template]), assigns: [post: post, recommended_posts: Typewriter.Post.recommend(post)])
+      if (post != nil) do
+        post_content = Template.eval(Path.join([root_dir, config.post_template]), assigns: [post: post, recommended_posts: Typewriter.Post.recommend(post)])
 
-      # Evaluate the layout template, by giving it the evaluated post template
-      layout_content = Template.eval(Path.join([root_dir, config.layout_template]), assigns: [content: post_content])
+        # Evaluate the layout template, by giving it the evaluated post template
+        layout_content = Template.eval(Path.join([root_dir, config.layout_template]), assigns: [content: post_content])
 
-      json_content = Poison.encode!(post)
+        json_content = Poison.encode!(post)
 
-      {new_dir_path, new_html_path} = new_singular_path(new_build_full_path, ".html")
+        {new_dir_path, new_html_path} = new_singular_path(new_build_full_path, ".html")
 
-      File.mkdir(new_dir_path)
-      File.write!(new_html_path, layout_content)
+        File.mkdir(new_dir_path)
+        File.write!(new_html_path, layout_content)
+      end
 
       post
     end)
