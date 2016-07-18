@@ -79,7 +79,7 @@ defmodule Typewriter.FileSystem do
         [task | tasks]
       Enum.member?(config.evaluate_with_layout, Path.basename(full_path)) ->
         task = Task.async(fn ->
-          FileWriter.evaluate_with_layout(root_dir, new_build_full_path, File.read!(full_path))
+          FileWriter.evaluate_with_layout(root_dir, new_build_full_path, full_path)
         end)
         [task | tasks]
       Enum.member?(@ignored_extensions, Path.extname(full_path)) ->

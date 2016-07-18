@@ -50,8 +50,10 @@ defmodule Typewriter.FileWriter do
     end)
   end
 
-  def evaluate_with_layout(root_dir, new_build_full_path, contents) do
+  def evaluate_with_layout(root_dir, new_build_full_path, full_path) do
       {new_dir_path, new_html_path} = new_singular_path(new_build_full_path, ".html")
+
+      contents = Template.eval(full_path)
 
       File.mkdir(new_dir_path)
       write_layout(root_dir, new_html_path, contents)

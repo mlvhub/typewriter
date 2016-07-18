@@ -1,8 +1,13 @@
 defmodule Typewriter.Template do
 
-  def eval(file, assigns, constants \\ Typewriter.Constants.get) do
-    {_, head} = assigns |> hd
-    new_assigns = Enum.concat([constants: constants], head)
+  def eval(file, assigns \\ [], constants \\ Typewriter.Constants.get) do
+    new_assigns =
+    if (Enum.empty?(assigns)) do
+      []
+    else
+      {_, head} = assigns |> hd
+      Enum.concat([constants: constants], head)
+    end
     EEx.eval_file(file, assigns: new_assigns)
   end
 
