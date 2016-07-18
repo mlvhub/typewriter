@@ -124,7 +124,7 @@ defmodule Typewriter.FileWriter do
   end
 
   defp new_singular_path(new_build_full_path, ext) do
-    new_dir_path = Path.join(Path.dirname(new_build_full_path), Path.basename(new_build_full_path, Path.extname(new_build_full_path)))
+    new_dir_path = Path.join(Path.dirname(new_build_full_path), Template.file_name(new_build_full_path))
     new_file_path = Path.join([new_dir_path, "index" <> ext])
     {new_dir_path, new_file_path}
   end
